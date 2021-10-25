@@ -986,6 +986,11 @@
               grid%ph_mekooh,grid%ph_tolooh,grid%ph_terpooh,grid%ph_mvk,              &
               grid%ph_glyald,grid%ph_hyac,                                            &
               grid%ph_cl2,grid%ph_hocl,grid%ph_fmcl,                                  &
+              !SAhmed Additional photolysis rates for mercury species
+              grid%ph_hgbr, grid%ph_hgxoh, grid%ph_hgxno2, grid%ph_hgxho2,            &
+              grid%ph_hgxbro, grid%ph_hgxclo, grid%ph_hgbr2, grid%ph_hgcl,            &
+              grid%ph_hgoh,                                                           &
+              !SAhmed--
               !LMarelle Additional photolysis rates for halogen mechanisms
               grid%ph_bro, grid%ph_br2, grid%ph_hobr, grid%ph_brno2,                  &
               grid%ph_brono2_br, grid%ph_brono2_bro, grid%ph_clo_o3p,                 &
