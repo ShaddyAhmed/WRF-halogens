@@ -436,8 +436,6 @@ tile_lon_loop : &
             ddvel(i, j, p_hgclo) = 0.0
             ddvel(i, j, p_hgoh) = 0.0
             ddvel(i, j, p_hgoho) = 0.0
-            ddvel(i, j, p_hgorgp) = 0.0
-            ddvel(i, j, p_hginorgp) = 0.0
           end do
         end do
       end if
