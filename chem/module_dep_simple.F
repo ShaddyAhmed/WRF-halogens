@@ -429,6 +429,15 @@ tile_lon_loop : &
             ddvel(i, j, p_ch3cl) = 0.0
             ddvel(i, j, p_ch3ccl2) = 0.0
             ddvel(i, j, p_ch2cl) = 0.0
+            ! Add mercury species here
+            ddvel(i, j, p_hgbr) = 0.0
+            ddvel(i, j, p_hgbro) = 0.0
+            ddvel(i, j, p_hgcl) = 0.0
+            ddvel(i, j, p_hgclo) = 0.0
+            ddvel(i, j, p_hgoh) = 0.0
+            ddvel(i, j, p_hgoho) = 0.0
+            ddvel(i, j, p_hgorgp) = 0.0
+            ddvel(i, j, p_hginorgp) = 0.0
           end do
         end do
       end if
@@ -3276,6 +3285,116 @@ is_cbm4_kpp : &
          dhr(p_clono2) = 2300. ! assumed to be same as HCl
          f0(p_clono2) = 1. ! assumed to be reactive
          dvj(p_clono2) = 0.1
+         ! SAhmed - Addition of mercury species 
+         ! hstar and dhr obtained from Sander et al. (2015)
+         ! f0 obtained from Geos-Chem 
+         ! Hg0 (Elemental mercury)
+         hstar(p_hg0) = 0.11
+         dhr(p_hg0) = 4800.
+         f0(p_hg0) = 1.0E-5
+         dvj(p_hg0) = 0.071
+         ! Use Geos-Chem hstar and dhr values for following HgII gas species
+         ! HgBrOH (HgII gas species, formula: BrHgOH)
+         hstar(p_hgbroh) = 1.0E+14
+         dhr(p_hgbroh) = 8400.
+         f0(p_hgbroh) = 0.
+         dvj(p_hgbroh) = 0.058
+         ! HgBrNO2 (HgII gas species, formula: syn-BrHgONO)
+         hstar(p_hgbrno2) = 1.0E+14
+         dhr(p_hgbrno2) = 8400.
+         f0(p_hgbrno2) = 0.
+         dvj(p_hgbrno2) = 0.055
+         ! HgBrHO2 (HgII gas species, formula: BrHgOOH)
+         hstar(p_hgbrho2) = 1.0E+14
+         dhr(p_hgbrho2) = 8400.
+         f0(p_hgbrho2) = 0.
+         dvj(p_hgbrho2) = 0.056
+         ! HgBrBrO (HgII gas species, formula: BrHgOBr)
+         hstar(p_hgbrbro) = 1.0E+14
+         dhr(p_hgbrbro) = 8400.
+         f0(p_hgbrbro) = 0.
+         dvj(p_hgbrbro) = 0.052
+         ! HgBrClO (HgII gas species, formula: BrHgOCl)
+         hstar(p_hgbrclo) = 1.0E+14
+         dhr(p_hgbrclo) = 8400.
+         f0(p_hgbrclo) = 0.
+         dvj(p_hgbrclo) = 0.055
+         ! HgBr2 (HgII gas species, formula: HgBr2)
+         hstar(p_hgbr2) = 1.0E+14
+         dhr(p_hgbr2) = 8400.
+         f0(p_hgbr2) = 0.
+         dvj(p_hgbr2) = 0.053
+         ! HgBrCl (HgII gas species, formula: HgBrCl)
+         hstar(p_hgbrcl) = 1.0E+14
+         dhr(p_hgbrcl) = 8400.
+         f0(p_hgbrcl) = 0.
+         dvj(p_hgbrcl) = 0.056
+         ! HgClOH (HgII gas species, formula: ClHgOH)
+         hstar(p_hgcloh) = 1.0E+14
+         dhr(p_hgcloh) = 8400.
+         f0(p_hgcloh) = 0.
+         dvj(p_hgcloh) = 0.063
+         ! HgClNO2 (HgII gas species, formula: syn-ClHgONO)
+         hstar(p_hgclno2) = 1.0E+14                           
+         dhr(p_hgclno2) = 8400.                                    
+         f0(p_hgclno2) = 0.                                             
+         dvj(p_hgclno2) = 0.060
+         ! HgClHO2 (HgII gas species, formula: ClHgOOH)
+         hstar(p_hgclho2) = 1.0E+14                           
+         dhr(p_hgclho2) = 8400.                                    
+         f0(p_hgclho2) = 0.                                             
+         dvj(p_hgclho2) = 0.061
+         ! HgClBrO (HgII gas species, formula: ClHgOBr)
+         hstar(p_hgclbro) = 1.0E+14                           
+         dhr(p_hgclbro) = 8400.                                    
+         f0(p_hgclbro) = 0.                                             
+         dvj(p_hgclbro) = 0.055
+         ! HgClClO (HgII gas species, formula: ClHgOCl)
+         hstar(p_hgclclo) = 1.0E+14                           
+         dhr(p_hgclclo) = 8400.                                    
+         f0(p_hgclclo) = 0.                                             
+         dvj(p_hgclclo) = 0.059
+         ! HgCl2 (HgII gas species, formula: HgCl2)
+         hstar(p_hgcl2) = 1.0E+14                           
+         dhr(p_hgcl2) = 8400.                                    
+         f0(p_hgcl2) = 0.                                             
+         dvj(p_hgcl2) = 0.061
+         ! HgOHOH (HgII gas species, formula: HOHgOH)
+         hstar(p_hgohoh) = 1.0E+14
+         dhr(p_hgohoh) = 8400.
+         f0(p_hgohoh) = 0.
+         dvj(p_hgohoh) = 0.065
+         ! HgOHNO2 (HgII gas species, formula: syn-HOHgONO)
+         hstar(p_hgohno2) = 1.0E+14
+         dhr(p_hgohno2) = 8400.
+         f0(p_hgohno2) = 0.
+         dvj(p_hgohno2) = 0.062
+         ! HgOHHO2 (HgII gas species, formula: HOHgOOH)
+         hstar(p_hgohho2) = 1.0E+14
+         dhr(p_hgohho2) = 8400.
+         f0(p_hgohho2) = 0.
+         dvj(p_hgohho2) = 0.063
+         ! HgOHBrO (HgII gas species, formula: HOHgOBr)
+         hstar(p_hgohbro) = 1.0E+14
+         dhr(p_hgohbro) = 8400.
+         f0(p_hgohbro) = 0.
+         dvj(p_hgohbro) = 0.056
+         ! HgOHClO (HgII gas species, formula: HOHgOCl)
+         hstar(p_hgohclo) = 1.0E+14
+         dhr(p_hgohclo) = 8400.
+         f0(p_hgohclo) = 0.
+         dvj(p_hgohclo) = 0.061
+         ! HgX (HgII volatilized gas species (treated as HgCl2))
+         ! TO BE ADDED
+         !hstar(p_hgx) = 1.0E+14
+         !dhr(p_hgx) = 8400.
+         !f0(p_hgx) = 0.
+         !dvj(p_hgx) = 0.061
+         ! HgP (Particulate mercury)
+         hstar(p_hgp) = 0.0
+         dhr(p_hgp) = 0.
+         f0(p_hgp) = 0.
+         dvj(p_hgp) = 0.071
        END IF
      end if
 
