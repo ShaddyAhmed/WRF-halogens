@@ -1234,9 +1234,16 @@
         chem, t_phy, p_phy, grid%alt,                                  &
         grid%ph_het_hobr, grid%ph_het_brono2, grid%ph_het_hcl,         &
         grid%ph_het_hbr, grid%ph_het_n2o5, grid%ph_het_hocl,           &
-        grid%ph_het_clono2, grid%ph_het_oh,                            &
+        grid%ph_het_clono2, grid%ph_het_oh, grid%ph_het_hgbroh,        &
+        grid%ph_het_hgbrno2, grid%ph_het_hgbrho2, grid%ph_het_hgbrbro, &
+        grid%ph_het_hgbrclo, grid%ph_het_hgbr2, grid%ph_het_hgbrcl,    &
+        grid%ph_het_hgcloh, grid%ph_het_hgclno2, grid%ph_het_hgclho2,  &
+        grid%ph_het_hgclbro, grid%ph_het_hgclclo, grid%ph_het_hgcl2,   &
+        grid%ph_het_hgohoh, grid%ph_het_hgohno2, grid%ph_het_hgohho2,  &
+        grid%ph_het_hgohbro, grid%ph_het_hgohclo,                      &       
         grid%aer_ph_01, grid%aer_ph_02, grid%aer_ph_03, grid%aer_ph_04, &
         grid%aer_ph_05, grid%aer_ph_06, grid%aer_ph_07, grid%aer_ph_08, &
+        grid%qcloud, grid%qndrop, grid%cldfra,                         &
         ids,ide, jds,jde, kds,kde,                                     &
         ims,ime, jms,jme, kms,kme,                                     &
         its,ite, jts,jte, kts,kte                                      )
