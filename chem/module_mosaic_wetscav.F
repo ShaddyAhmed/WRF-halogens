@@ -141,6 +141,8 @@ CONTAINS
              chem(i, k, j, p_hgohbro) = MAX(chem(i, k, j, p_hgohbro), 0.0)
              chem(i, k, j, p_hgohclo) = chem(i, k, j, p_hgohclo) * (1.0 - hbr_scav * dtstepc)
              chem(i, k, j, p_hgohclo) = MAX(chem(i, k, j, p_hgohclo), 0.0)
+             chem(i, k, j, p_hgp) = chem(i, k, j, p_hgp) * (1.0 - hbr_scav * dtstepc)
+             chem(i, k, j, p_hgp) = MAX(chem(i, k, j, p_hgp), 0.0)
            END IF
          END DO
        END DO
