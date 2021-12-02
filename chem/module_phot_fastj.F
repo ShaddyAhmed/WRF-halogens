@@ -143,7 +143,7 @@
    lfastj_brono2_br, lfastj_brono2_bro, lfastj_clo_o3p,      &
    lfastj_clo_o1d, lfastj_cl2, lfastj_hocl, lfastj_clno2,    &
    lfastj_clono2_no2, lfastj_clono2_no3, lfastj_brcl,        &
-   lfastj_ocloi, lfastj_hgbr, lfastj_hgxoh, lfastj_hgxno2,   &
+   lfastj_oclo, lfastj_hgbr, lfastj_hgxoh, lfastj_hgxno2,    &
    lfastj_hgxho2, lfastj_hgxbro, lfastj_hgxclo,              &
    lfastj_hgbr2, lfastj_hgcl, lfastj_hgoh
 

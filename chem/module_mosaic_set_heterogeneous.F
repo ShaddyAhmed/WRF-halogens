@@ -89,6 +89,7 @@
          drydp, drydens, drymass, dryvol, dryarea, wetarea
     REAL(r8) :: freepath, molar_weight, diffusion_constant
     REAL(r8) :: cld_num, drop_num, cld_fra, cld_area
+    REAL(r8) :: droplet_mass, droplet_volume, reff_droplet
     REAL(r8) :: mean_speed, knudsen, j_corr, upper, lower, aerosol_bin_ph
     INTEGER,  PARAMETER :: nspecies = 26
     REAL(r8), DIMENSION(nspecies) :: k_het
@@ -318,7 +319,7 @@
         IF (ispecies .gt. 8) THEN
           ! Uptake to Aerosols !
           ! Calculate k_het for uptake to aerosols
-          k_het(ispecies) = k_het(ispecies) + wetarea *
+          k_het(ispecies) = k_het(ispecies) + wetarea * &
           (((0.5_r8*wetdp)/diffusion_constant)+(4.0_r8/(mean_speed*gamma_factors(ispecies))))**-1.0_r8
           
           ! Uptake to Clouds !
@@ -340,7 +341,7 @@
             ! Calculate effective mean cloud surface area (cm2/cm3 air)
              cld_area = 4. * pi * drop_num * airdens * reff_droplet ** 2
                 
-             k_het_cld(ispecies) = k_het_cld(ispecies) + cld_area *
+             k_het_cld(ispecies) = k_het_cld(ispecies) + cld_area * &
                       ((reff_droplet/diffusion_constant)+(4.0_r8/(mean_speed*gamma_factors(ispecies))))**-1.0_r8
           END IF
 

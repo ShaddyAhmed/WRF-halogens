@@ -1243,7 +1243,8 @@
         grid%ph_het_hgohbro, grid%ph_het_hgohclo,                      &       
         grid%aer_ph_01, grid%aer_ph_02, grid%aer_ph_03, grid%aer_ph_04, &
         grid%aer_ph_05, grid%aer_ph_06, grid%aer_ph_07, grid%aer_ph_08, &
-        grid%qcloud, grid%qndrop, grid%cldfra,                         &
+        moist(ims,kms,jms,p_qc), scalar(ims,kms,jms,p_qndrop),         & 
+        grid%cldfra,                                                   &
         ids,ide, jds,jde, kds,kde,                                     &
         ims,ime, jms,jme, kms,kme,                                     &
         its,ite, jts,jte, kts,kte                                      )
