@@ -54,6 +54,7 @@ CONTAINS
          xice, meltedsnow, coszen,                                     &
          drydepflx_o3, drydepflx_hobr, drydepflx_brno3,                &
          drydepflx_hbr, drydepflx_br2, emiss_br2,                      &
+         drydepflx_hg2, emiss_hg0,                                     &
          ids,ide, jds,jde, kds,kde,                                    &
          ims,ime, jms,jme, kms,kme,                                    &
          its,ite, jts,jte, kts,kte,                                    &
@@ -104,6 +105,13 @@ CONTAINS
   ! Accumulated br2 emission flux diagnosis (mole/m2)
   REAL, DIMENSION(ims:ime, jms:jme)               ,               &
         INTENT(INOUT) :: emiss_br2
+  ! Dry deposition flux of all HgII species (mole/m2/s), calculated in
+  ! dry_dep_driver
+    REAL, DIMENSION(ims:ime, jms:jme),                             &
+          INTENT(IN) :: drydepflx_hg2
+  ! Accumulated hg0 emission flux diagnosis (mole/m2)
+    REAL, DIMENSION(ims:ime, jms:jme)               ,              &
+          INTENT(INOUT) :: emiss_hg0
   ! Trace species mixing ratios (gases in ppm, aerosols in microg/kg)
   REAL, DIMENSION(ims:ime, kms:kme, jms:jme, num_chem),           &
         INTENT(INOUT) :: chem
@@ -154,7 +162,8 @@ CONTAINS
   LOGICAL :: do_snow_emissions, do_blowing_snow
   ! Br2 and BrCl emissions (mole/m2/s)
   REAL :: br2_emi = 0.0, brcl_emi = 0.0
-
+  ! Hg0 emissions (mole/m2/s)
+  REAL :: hg0_emi = 0.0
   !---- Local variables for the blowing snow model
   ! Br emissions (kg/m2/s), NaCl emissions (kg/m2/s), Snow sublimation flux (kg/m2/s), Normalized
   ! column-integrated snow sublimation flux (kg/m2/day), Snow mixing ratio in
@@ -222,6 +231,7 @@ CONTAINS
       br2_emi = 0.0
       brcl_emi = 0.0
       nacl_emi = 0.0
+      hg0_emi = 0.0
       aer_num_change = 0.0
 
       a_prime = 1.0 / (1.038 + 0.03758 * snow_age - 0.00014349 * snow_age ** 2.0 &
@@ -262,7 +272,7 @@ CONTAINS
           END IF ! do_snow_emissions
 
           !---- Br2 "recycling" release
-
+        
           ! Over sea ice
           IF (xice(i,j) .GT. seaice_crit) THEN
             ! Over FY ice, HOBr and BrONO2 deposition gets converted to Br2
@@ -284,6 +294,8 @@ CONTAINS
           !     brcl_emi = brcl_emi + (drydepflx_hobr(i,j) + drydepflx_brno3(i,j) - drydepflx_hbr(i,j))
           !   END IF
 
+            ! Hg0 emissions over sea ice
+            hg0_emi = hg0_emi + (drydepflx_hg2(i,j) * coszen(i,j) * 0.6 * xice(i,j)) 
           END IF
 
           ! Over continental snow
@@ -297,9 +309,16 @@ CONTAINS
             ELSE
               br2_emi = br2_emi + drydepflx_hbr(i,j)
             END IF
+                
+            ! Hg0 emissions over continental snow
+            hg0_emi = hg0_emi + (drydepflx_hg2(i,j) * coszen(i,j) * 0.6)
+
           END IF
         END IF ! tsk <= tskcrit
       END IF ! (snowh(i, j) .GT. 0.01 .OR. xice(i, j) .GT. seaice_crit), snow or sea ice cell
+
+      !---- Output diagnosis, accumulated Hg0 emissions in mole/m2
+      emiss_hg0(i,j) = emiss_hg0(i,j) + hg0_emi * dtstep
 
       !-------- Halogen emissions from blowing snow
 
@@ -408,7 +427,7 @@ CONTAINS
 
         !---- Output diagnosis, accumulated br2 emissions in mole/m2
         emiss_br2(i,j) = emiss_br2(i,j) + br2_emi * dtstep
-
+ 
       END DO !isize
 
     END DO ! i loop
