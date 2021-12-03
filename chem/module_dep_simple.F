@@ -3286,11 +3286,11 @@ is_cbm4_kpp : &
          ! SAhmed - Addition of mercury species 
          ! hstar and dhr obtained from Sander et al. (2015)
          ! f0 obtained from Geos-Chem 
-         ! Hg0 (Elemental mercury)
-         hstar(p_hg0) = 0.11
-         dhr(p_hg0) = 4800.
-         f0(p_hg0) = 1.0E-5
-         dvj(p_hg0) = 0.071
+         ! Hg (Elemental mercury)
+         hstar(p_hg) = 0.11
+         dhr(p_hg) = 4800.
+         f0(p_hg) = 1.0E-5
+         dvj(p_hg) = 0.071
          ! Use Geos-Chem hstar and dhr values for following HgII gas species
          ! HgBrOH (HgII gas species, formula: BrHgOH)
          hstar(p_hgbroh) = 1.0E+14
