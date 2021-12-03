@@ -317,9 +317,6 @@ CONTAINS
         END IF ! tsk <= tskcrit
       END IF ! (snowh(i, j) .GT. 0.01 .OR. xice(i, j) .GT. seaice_crit), snow or sea ice cell
 
-      !---- Output diagnosis, accumulated Hg0 emissions in mole/m2
-      emiss_hg0(i,j) = emiss_hg0(i,j) + hg0_emi * dtstep
-
       !-------- Halogen emissions from blowing snow
 
       IF (do_blowing_snow) THEN
@@ -429,6 +426,18 @@ CONTAINS
         emiss_br2(i,j) = emiss_br2(i,j) + br2_emi * dtstep
  
       END DO !isize
+
+      !-------- Add Hg0 emissions from snow on sea ice and continental snow --------
+      !---- Hg0 emissions
+      IF (chem(i,kts,j,p_hg) + hg0_emi * conv <= 0) THEN
+        hg0_emi = - chem(i,kts,j,p_hg) / conv
+        chem(i,kts,j,p_hg) = 0.0
+      ELSE
+        chem(i,kts,j,p_hg) = chem(i,kts,j,p_hg) + hg0_emi * conv
+      END IF
+
+      !---- Output diagnosis, accumulated Hg0 emissions in mole/m2
+      emiss_hg0(i,j) = emiss_hg0(i,j) + hg0_emi * dtstep
 
     END DO ! i loop
   END DO ! j loop
