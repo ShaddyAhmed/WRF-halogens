@@ -277,9 +277,9 @@ CONTAINS
             !----- Cl2 "photochemical" release from continental snow and sea ice
             ! Photochemical release based on initial flux from 1D study
             IF (xice(i,j) .GT. seaice_crit) THEN 
-              cl2_emi = cl2_emi + f0_cl2 * xice(i,j) * coszen
+              cl2_emi = cl2_emi + f0_cl2 * xice(i,j) * coszen(i,j)
             ELSEIF (snowh(i, j) .GT. 0.01 .AND. xice(i, j) .LE. 0.01) THEN
-              cl2_emi = cl2_emi + f0_cl2 * coszen
+              cl2_emi = cl2_emi + f0_cl2 * coszen(i,j)
             END IF
 
           END IF ! do_snow_emissions
