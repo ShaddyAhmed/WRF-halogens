@@ -68,6 +68,8 @@ CONTAINS
          snowc, xice, meltedsnow, coszen,                                  &
          drydepflx_o3, drydepflx_hobr,                                     &
          drydepflx_brno3, drydepflx_hbr, drydepflx_br2, emiss_br2,         &
+         drydepflx_hocl, drydepflx_clno3, drydepflx_hcl,                   &
+         emiss_cl2,                                                        &
          ! stuff for aircraft emissions
          emis_aircraft,                                                    &
          ! stuff for GHG fluxes
@@ -338,9 +340,10 @@ CONTAINS
 ! end stuff for lightning NOx
 ! stuff for Br2 emissions from snow
       REAL, DIMENSION(ims:ime, jms:jme), INTENT(IN) :: snowc, xice, coszen, drydepflx_o3, &
-                            drydepflx_hobr, drydepflx_brno3, drydepflx_hbr, drydepflx_br2
+                            drydepflx_hobr, drydepflx_brno3, drydepflx_hbr, drydepflx_br2, &
+                            drydepflx_hocl, drydepflx_clno3, drydepflx_hcl
   REAL, DIMENSION(ims:ime, jms:jme)               ,               &
-        INTENT(INOUT) :: emiss_br2, meltedsnow
+        INTENT(INOUT) :: emiss_br2, emiss_cl2, meltedsnow
 
 !
 ! Local variables...
@@ -801,6 +804,8 @@ CONTAINS
          xice, meltedsnow, coszen,                                     &
          drydepflx_o3, drydepflx_hobr, drydepflx_brno3,                &
          drydepflx_hbr, drydepflx_br2, emiss_br2,                      &
+         drydepflx_hocl, drydepflx_clno3, drydepflx_hcl,               &
+         emiss_cl2,                                                    &
          ids,ide, jds,jde, kds,kde,                                    &
          ims,ime, jms,jme, kms,kme,                                    &
          its,ite, jts,jte, kts,kte,                                    &

@@ -879,7 +879,8 @@
               grid%snowc, grid%xice, grid%meltedsnow, grid%coszen,                         &
               grid%drydepflx_o3, grid%drydepflx_hobr,                                      &
               grid%drydepflx_brno3, grid%drydepflx_hbr, grid%drydepflx_br2,                &
-              grid%emiss_br2,                                                              &
+              grid%emiss_br2, grid%drydepflx_hocl, grid%drydepflx_clno3,                   &
+              grid%drydepflx_hcl, grid%emiss_cl2,                                          &
          ! stuff for aircraft emissions
               emis_aircraft,                                                               &
          ! stuff for the GHG fluxes

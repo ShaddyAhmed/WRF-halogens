@@ -24,6 +24,8 @@ CONTAINS
                ! Dry deposition fluxes needed for Br2 emissions from snow
                drydepflx_o3, drydepflx_hobr, drydepflx_brno3,             &
                drydepflx_hbr, drydepflx_br2, dvel_o3,                     &
+               ! Dry deposition fluxes needed for Cl2 emissions from snow
+               drydepflx_hocl, drydepflx_clno3, drydepflx_hcl,            &
                emis_ant,ebu_in,                                           &
                sf_urban_physics,numgas,current_month,dvel,snowh,xice,     & 
                dustdrydep_1,dustdrydep_2,dustdrydep_3,                    &
@@ -146,6 +148,12 @@ CONTAINS
    REAL,  DIMENSION(ims:ime, jms:jme),                          &
           INTENT(INOUT) :: drydepflx_o3, drydepflx_hobr,        &
           drydepflx_brno3, drydepflx_hbr, drydepflx_br2
+
+   ! Dry deposition fluxes of HOCl, ClNO3, and HCl (mol/m2/s)
+   REAL,  DIMENSION(ims:ime, jms:jme),                          &
+          INTENT(INOUT) :: drydepflx_hocl, drydepflx_clno3,     &
+          drydepflx_hcl
+
    ! O3 deposition velocity (cm/s)
    REAL,  DIMENSION(ims:ime, jms:jme),                          &
           INTENT(INOUT) :: dvel_o3
@@ -489,6 +497,14 @@ CONTAINS
 
              dvel_o3(i,j) = m2cm*ddvel(i,j,p_o3)
 
+             drydepflx_hocl(i, j) = chem(i, kts, j, p_hocl) * p_phy(i, kts, j)      &
+               / (RSI * t_phy(i, kts, j)) * ddvel(i, j, p_hocl) * 1.E-6
+
+             drydepflx_clno3(i, j) = chem(i, kts, j, p_clono2) * p_phy(i, kts, j)   &
+               / (RSI * t_phy(i, kts, j)) * ddvel(i, j, p_clono2) *  1.E-6
+
+             drydepflx_hcl(i, j) = chem(i, kts, j, p_hcl) * p_phy(i, kts, j)        &
+               / (RSI * t_phy(i, kts, j)) * ddvel(i, j, p_hcl) * 1.E-6
            ENDDO
          ENDDO
        ENDIF

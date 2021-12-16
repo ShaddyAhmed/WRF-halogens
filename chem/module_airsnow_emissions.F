@@ -44,6 +44,13 @@
 !TODO If someone tries to use this option with another mechanism, include a call
 ! to WRF_FATAL in chemics_init.F.
 
+!*******************************************************************************
+! Update history: 
+! 2021/12/15, Shaddy Ahmed
+!   Update halogen snow emissions routine to include Cl2 surface emissions from 
+!   sea ice and continental snow
+!*******************************************************************************
+
 MODULE module_airsnow_emissions
 
 CONTAINS
@@ -54,6 +61,8 @@ CONTAINS
          xice, meltedsnow, coszen,                                     &
          drydepflx_o3, drydepflx_hobr, drydepflx_brno3,                &
          drydepflx_hbr, drydepflx_br2, emiss_br2,                      &
+         drydepflx_hocl, drydepflx_clno3, drydepflx_hcl,               &
+         emiss_cl2,                                                    & 
          ids,ide, jds,jde, kds,kde,                                    &
          ims,ime, jms,jme, kms,kme,                                    &
          its,ite, jts,jte, kts,kte,                                    &
@@ -98,12 +107,14 @@ CONTAINS
         INTENT(INOUT) :: meltedsnow
   ! Dry deposition fluxes of O3, HOBr, BrNO3, and HBr (mole/m2/s), calculated in
   ! dry_dep_driver
+  ! Also include dry deposition fluxes of HOCl, ClNO3, and HCl
   REAL,  DIMENSION(ims:ime, jms:jme),                             &
         INTENT(IN) :: drydepflx_o3, drydepflx_hobr,               &
-        drydepflx_brno3, drydepflx_hbr, drydepflx_br2
-  ! Accumulated br2 emission flux diagnosis (mole/m2)
+        drydepflx_brno3, drydepflx_hbr, drydepflx_br2,            &
+        drydepflx_hocl, drydepflx_clno3, drydepflx_hcl
+  ! Accumulated br2 and cl2 emission flux diagnosis (mole/m2)
   REAL, DIMENSION(ims:ime, jms:jme)               ,               &
-        INTENT(INOUT) :: emiss_br2
+        INTENT(INOUT) :: emiss_br2, emiss_cl2
   ! Trace species mixing ratios (gases in ppm, aerosols in microg/kg)
   REAL, DIMENSION(ims:ime, kms:kme, jms:jme, num_chem),           &
         INTENT(INOUT) :: chem
@@ -152,8 +163,12 @@ CONTAINS
   REAL :: conv, conv2
   ! Switches for enabling surface snow or blowing snow emissions
   LOGICAL :: do_snow_emissions, do_blowing_snow
-  ! Br2 and BrCl emissions (mole/m2/s)
-  REAL :: br2_emi = 0.0, brcl_emi = 0.0
+  ! Br2 and Cl2 emissions (mole/m2/s)
+  REAL :: br2_emi = 0.0, cl2_emi = 0.0
+  ! Initial flux values for Cl2 snow emissions (molec/cm2/s)
+  ! Values are estimated from the PACT-1D model study done for spring 2009 at
+  ! Utqiagvik, Alaska
+  REAL :: f0_cl2 = 2.0E9
 
   !---- Local variables for the blowing snow model
   ! Br emissions (kg/m2/s), NaCl emissions (kg/m2/s), Snow sublimation flux (kg/m2/s), Normalized
@@ -220,7 +235,7 @@ CONTAINS
   DO j = jts,jte
     DO i = its,ite
       br2_emi = 0.0
-      brcl_emi = 0.0
+      cl2_emi = 0.0
       nacl_emi = 0.0
       aer_num_change = 0.0
 
@@ -257,16 +272,26 @@ CONTAINS
               br2_emi = br2_emi + drydepflx_o3(i,j) * 0.075 * xice(i,j)
             ELSEIF (coszen(i,j) .LT. 0.087 .AND. xice(i,j) .GT. seaice_crit) THEN
               br2_emi = br2_emi + drydepflx_o3(i,j) * 0.001 * xice(i,j)
-
             END IF ! coszen >= 0.087 <=> SZA <= 85°, and over ice
+
+            !----- Cl2 "photochemical" release from continental snow and sea ice
+            ! Photochemical release based on initial flux from 1D study
+            IF (xice(i,j) .GT. seaice_crit) THEN 
+              cl2_emi = cl2_emi + f0_cl2 * xice(i,j) * coszen
+            ELSEIF (snowh(i, j) .GT. 0.01 .AND. xice(i, j) .LE. 0.01) THEN
+              cl2_emi = cl2_emi + f0_cl2 * coszen
+            END IF
+
           END IF ! do_snow_emissions
 
-          !---- Br2 "recycling" release
+          !---- Br2 and Cl2 "recycling" release
 
           ! Over sea ice
           IF (xice(i,j) .GT. seaice_crit) THEN
             ! Over FY ice, HOBr and BrONO2 deposition gets converted to Br2
+            ! 0.1 factor for Cl2 recycling taken from 1D model study
             br2_emi = br2_emi + (drydepflx_hobr(i,j) + drydepflx_brno3(i,j)) * xice(i,j)
+            cl2_emi = cl2_emi + 0.1 * (drydepflx_hocl(i,j) + drydepflx_clno3(i,j)) * xice(i,j)
 
           ! ! This is disabled for now, as there is no strong evidence that MYI
           ! and FYI act differently (Peterson et al., 2019)
@@ -297,6 +322,14 @@ CONTAINS
             ELSE
               br2_emi = br2_emi + drydepflx_hbr(i,j)
             END IF
+
+            !Cl2 snow recycling - check this for continental snow
+            IF ((drydepflx_hocl(i,j) + drydepflx_clno3(i,j)) .LE. drydepflx_hcl(i,j)) THEN
+              cl2_emi = cl2_emi + 0.1 * (drydepflx_hocl(i,j) + drydepflx_clno3(i,j))
+            ELSE
+              cl2_emi = cl2_emi + drydepflx_hcl(i,j)
+            END IF
+
           END IF
         END IF ! tsk <= tskcrit
       END IF ! (snowh(i, j) .GT. 0.01 .OR. xice(i, j) .GT. seaice_crit), snow or sea ice cell
@@ -408,8 +441,18 @@ CONTAINS
 
         !---- Output diagnosis, accumulated br2 emissions in mole/m2
         emiss_br2(i,j) = emiss_br2(i,j) + br2_emi * dtstep
-
       END DO !isize
+      
+      !---- Cl2 emissions
+      IF (chem(i,kts,j,p_cl2)  + cl2_emi * conv <= 0) THEN
+        cl2_emi = - chem(i,kts,j,p_cl2) / conv
+        chem(i,kts,j,p_cl2) = 0.0
+      ELSE
+        chem(i,kts,j,p_cl2) = chem(i,kts,j,p_cl2) + cl2_emi * conv
+      END IF
+
+      !---- Output diagnosis, accumulated cl2 emissions in mole/m2
+      emiss_cl2(i,j) = emiss_cl2(i,j) + cl2_emi * dtstep
 
     END DO ! i loop
   END DO ! j loop
