@@ -133,6 +133,8 @@
  CH3Cl = IGNORE;     
  CH3CCl2 = IGNORE;   
  CH2Cl = IGNORE;     
+ ClRO2 = IGNORE;
+ C3H7O2 = IGNORE;
 #DEFFIX
  H2O = 2H + O;
  M = IGNORE;
