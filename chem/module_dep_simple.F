@@ -3276,11 +3276,6 @@ is_cbm4_kpp : &
          dhr(p_clono2) = 2300. ! assumed to be same as HCl
          f0(p_clono2) = 1. ! assumed to be reactive
          dvj(p_clono2) = 0.1
-         ! HCl, from Sander et al. 2015
-         hstar(p_hcl) = 1.51E+3 
-         dhr(p_hcl) = 2300.
-         f0(p_hcl) = 0.
-         dvj(p_hcl) = 0.166
        END IF
      end if
 
