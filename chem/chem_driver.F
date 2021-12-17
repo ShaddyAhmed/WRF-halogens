@@ -1072,6 +1072,7 @@
                ! Dry deposition fluxes needed for Br2 emissions from snow
                  grid%drydepflx_o3, grid%drydepflx_hobr, grid%drydepflx_brno3,        &
                  grid%drydepflx_hbr, grid%drydepflx_br2, grid%dvel_o3,                &
+                 grid%drydepflx_hocl, grid%drydepflx_clno3, grid%drydepflx_hcl,       &
                  emis_ant,ebu_in,                                                     &
                  config_flags%sf_urban_physics,numgas,current_month,dvel,grid%snowh,  &
                  grid%xice, &
