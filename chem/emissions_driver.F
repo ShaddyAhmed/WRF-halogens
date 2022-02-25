@@ -69,7 +69,11 @@ CONTAINS
          drydepflx_o3, drydepflx_hobr,                                     &
          drydepflx_brno3, drydepflx_hbr, drydepflx_br2, emiss_br2,         &
          drydepflx_hocl, drydepflx_clno3, drydepflx_hcl,                   &
+<<<<<<< Updated upstream
          emiss_cl2,                                                        &
+=======
+         emiss_cl2, emiss_brcl,                                            &
+>>>>>>> Stashed changes
          ! stuff for aircraft emissions
          emis_aircraft,                                                    &
          ! stuff for GHG fluxes
@@ -343,7 +347,11 @@ CONTAINS
                             drydepflx_hobr, drydepflx_brno3, drydepflx_hbr, drydepflx_br2, &
                             drydepflx_hocl, drydepflx_clno3, drydepflx_hcl
   REAL, DIMENSION(ims:ime, jms:jme)               ,               &
+<<<<<<< Updated upstream
         INTENT(INOUT) :: emiss_br2, emiss_cl2, meltedsnow
+=======
+        INTENT(INOUT) :: emiss_br2, emiss_cl2, emiss_brcl, meltedsnow
+>>>>>>> Stashed changes
 
 !
 ! Local variables...
@@ -805,7 +813,11 @@ CONTAINS
          drydepflx_o3, drydepflx_hobr, drydepflx_brno3,                &
          drydepflx_hbr, drydepflx_br2, emiss_br2,                      &
          drydepflx_hocl, drydepflx_clno3, drydepflx_hcl,               &
+<<<<<<< Updated upstream
          emiss_cl2,                                                    &
+=======
+         emiss_cl2, emiss_brcl,                                        &
+>>>>>>> Stashed changes
          ids,ide, jds,jde, kds,kde,                                    &
          ims,ime, jms,jme, kms,kme,                                    &
          its,ite, jts,jte, kts,kte,                                    &
